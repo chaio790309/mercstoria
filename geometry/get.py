@@ -18,7 +18,23 @@ def get(x):
     #print(ass)
     re=[]
     for a in ass:
-        if n == 6:
+        if n==5:
+            e=0
+            match a.text[len(a.span.string)+1:].replace("\n",""):
+                case "炎":
+                    e="fire"
+                case "水":
+                    e="water"
+                case "風":
+                    e="wind"
+                case "光":
+                    e="light"
+                case _:
+                    e="dark"
+            re=re+[e]
+            n+=1
+        
+        elif n == 6:
             t=0
             match a.text[len(a.span.string)+1:].replace("\n",""):
                 case "早熟":
@@ -45,11 +61,11 @@ def get(x):
     else:
         re.pop(6)
         name=name.string
-    if re[4] == "":
+    if re[4] == "": #單段傭兵補上1
         re[4]="1"
 
     element=root.find("div",class_="db_other_text")
-    element=(element.text.replace("\n\xa0\n","")).replace("\n","").replace("炎","").replace("水","").replace("風","").replace("光","").replace("闇","").replace("％","%")
+    element=(element.text.replace("\n\xa0\n","")).replace("\n","").replace("炎","").replace("水","").replace("風","").replace("光","").replace("闇","").replace("％","").replace("%","")
     #print(ele)
     element=element.split("属性")
     #print(ele[1:])
@@ -57,4 +73,7 @@ def get(x):
 
     #re=[name]+re+ele[1:]
     #print([name]+re+ele[1:])
+    # re=Series([name]+re+element[1:])
+    # print(re)
+
     return [name]+re+element[1:]
