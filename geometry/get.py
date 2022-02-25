@@ -1,13 +1,13 @@
 from asyncio.windows_events import NULL
 
+import urllib.request as req
+import bs4
 
 def get(x):
-    import urllib.request as req
+
     url=x
     with req.urlopen(url) as response:
         data=response.read().decode("utf-8")
-
-    import bs4
     root=bs4.BeautifulSoup(data,"html.parser")
 
     name=root.find("h2")
@@ -83,6 +83,3 @@ def get(x):
     # print(ele)
 
     return [name]+re+ele
-
-def check():
-    pass
