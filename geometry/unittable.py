@@ -10,7 +10,7 @@ def unittable():
         "element":allunit[1::13],
         "growth":allunit[2::13],
         "weapon":allunit[3::13],
-        "traget":allunit[4::13],
+        "target":allunit[4::13],
         "hit":allunit[5::13],
         "atk":allunit[6::13],
         "atks":allunit[7::13],
