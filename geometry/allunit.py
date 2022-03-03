@@ -14,7 +14,7 @@ def allunit():
 
 
     root=bs4.BeautifulSoup(data,"html.parser") #解析網頁data
-    names=root.find_all("td",class_="no-min-width")
+    names=root.find_all("td",class_="no-min-width") #篩選標籤
     #print(units)
     a=0 #記位置
     s=0 #計數
@@ -30,11 +30,11 @@ def allunit():
                     a+=1
                     s+=1
                 case 1:
-                    if name.span.string in ["弓矢","魔法","銃弾"]: #確認條件
+                    if name.span.string in ["弓矢","魔法","銃弾"]: #確認條件 武器
                         ok=True
                     a+=1
                 case 4:
-                    if (int(name.span.string) >150 and ok == True ): #確認條件2
+                    if (int(name.span.string) >150 and ok == True ): #確認條件2 手長
                         result=g.get("https://xn--cckza4aydug8bd3l.gamerch.com/"+n)
                         print(result)
                         b=b+1
@@ -50,7 +50,7 @@ def allunit():
 
     return allunit
 
-def check():
+def check(): #確認符合資格數量
     url="https://xn--cckza4aydug8bd3l.gamerch.com/%E2%98%855"
     with req.urlopen(url) as response: #開啟網頁並獲得data
         data=response.read().decode("utf-8")
@@ -63,11 +63,11 @@ def check():
         if name.span != None:
             match a%9:
                 case 1:
-                    if name.span.string in ["弓矢","魔法","銃弾"]: #確認條件
+                    if name.span.string in ["弓矢","魔法","銃弾"]: #確認條件 武器
                         ok=True
                     a+=1
                 case 4:
-                    if (int(name.span.string) >150 and ok == True ): #確認條件2
+                    if (int(name.span.string) >150 and ok == True ): #確認條件2 手長
                         b=b+1
                     a+=1
                     ok=False

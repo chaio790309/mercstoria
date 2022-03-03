@@ -18,17 +18,17 @@ def atks(atks:float)->list: #進場攻速
     realatks=round(atks*0.6*(1-asstone*0.01),3)
     return realatks
 
-def target(unittraget:list,enemytraget:int)->list:
+def target(unittraget:list,enemytraget:int)->list: #傷害體數
     result=[]
     for t in unittraget:
         result+=[min(t,int(enemytraget))]
     return result
 
-def ballsec(target:int,hit:int,ratks:float,realtraget)->list:
+def ballsec(target:int,hit:int,ratks:float,realtraget)->list: #蓄球速度
     realballsec=(0.15/(target*hit)+ratks/15)*realtraget*hit/ratks
     return realballsec
 
-def rround(target:int,ballsec:float,ratks:float)->list:
+def rround(target:int,ballsec:float,ratks:float)->list: #一輪期望
     realround=3.625+target+5/ballsec+ratks
     return realround
 
@@ -42,20 +42,20 @@ def atk(atk:float,growth:float)->list: #攻擊 成長  進場攻擊
 def element(unitelement:str,element:float,index:list)->list: #屬性 補正 武器 體數 
     breakseed=38.7*0.01 #1.798雙中衛破魔寵效果
     result=[]
-    for i in index: #用在其他地方可能會有問題
+    for i in index:
         if unitelement[i] in ["fire","water","wind"]:
             result+=[(element[i]*(1+0.12)+0.09)*(1+0.35)*(1+0.06)+breakseed*5+0.35/3+0.35*5/15]
         else:
             result+=[(element[i]*(1+0.12)+0.12)*(1+0.35)*(1+0.06)+breakseed*5+0.35/3+0.35*5/15]
     return result #普攻補正
 
-def normalDPS(target:int,atks:float,atk:float,ele:float,bonus:float)->list:
+def normalDPS(target:int,atks:float,atk:float,ele:float,bonus:float)->list: #普攻期望
     soulseed=39*0.01 #1.79雙中衛魂魔寵效果
     nDPS=round(atk*3.9*target/atks*ele*bonus*(1+soulseed)**5,2)
     return nDPS
     #基本攻擊力*Guts攻擊*(1+陣型%)*(1+魂%)^5*屬性補正%*外皮%*武器特攻%/5
 
-def SkillDPS(weapon:str,target:int,hit:int,element:float,atk:float,index:list,time:int,bonus:float)->list:
+def SkillDPS(weapon:str,target:int,hit:int,element:float,atk:float,index:list,time:int,bonus:float)->list: #上位期望
     soulseed=39*0.01 #1.779雙中衛魂魔寵效果
     result=[]
     for i in index:
@@ -78,16 +78,16 @@ def SkillDPS(weapon:str,target:int,hit:int,element:float,atk:float,index:list,ti
             result+=[(36.75/5+13.5-(target[i]+hit[i])/2)*(atk[i]*3.9)*(element[i]+(36.75*3-target[i]*10)*0.01)*bonus[i]*(1+soulseed)**5/int(time)]
     return result
 
-def skill1(round:float,target:int,rballsec:float)->list:
+def skill1(round:float,target:int,rballsec:float)->list: #發動時間1
     skill1=round-(3.625+target)-2/rballsec
     return skill1
 
 
-def skill2(round:float,target:int,rballsec:float)->list:
+def skill2(round:float,target:int,rballsec:float)->list: #發動時間2
     skill2=round*2-(3.625+target)-2/rballsec
     return skill2
 
-def skillnumber(skill2:list,time:int)->list:
+def skillnumber(skill2:list,time:int)->list: #發動期望次數
     result=[]
     for s in skill2:
         if s>int(time)+3:
@@ -96,6 +96,6 @@ def skillnumber(skill2:list,time:int)->list:
             result+=[2]
     return result
 
-def expectedDPS(normaldps:float,skilldps:float,skillnumber:int)->list:
+def expectedDPS(normaldps:float,skilldps:float,skillnumber:int)->list: #期望傷害 排序
     result=normaldps+skilldps*skillnumber
     return result
