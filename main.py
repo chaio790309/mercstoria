@@ -12,7 +12,8 @@ if result:
     data=pd.read_csv("unit.csv")    
     unitcount=ga.check() #確認數量
     if unitcount != data.shape[0]:
-        update=input("偵測到新資料，是否進行更新 (y/n) : ")
+        different=unitcount-data.shape[0]
+        update=input("偵測到 "+str(different)+"筆 新資料，是否進行更新 (y/n) : ")
         while True:
             match update:
                 case "y":
