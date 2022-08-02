@@ -55,7 +55,7 @@ def normalDPS(target:int,atks:float,atk:float,ele:float,bonus:float)->list: #普
     return nDPS
     #基本攻擊力*Guts攻擊*(1+陣型%)*(1+魂%)^5*屬性補正%*外皮%*武器特攻%/5
 
-def SkillDPS(weapon:str,target:int,hit:int,element:float,atk:float,index:list,time:int,bonus:float)->list: #上位期望
+def SkillDPS(weapon:str,target:int,hit:int,element:float,atk:float,index:list,time:int,round:float,bonus:float)->list: #上位期望
     soulseed=39*0.01 #1.779雙中衛魂魔寵效果
     result=[]
     for i in index:
@@ -71,11 +71,20 @@ def SkillDPS(weapon:str,target:int,hit:int,element:float,atk:float,index:list,ti
                     e=3.83
                 case 5:
                     e=4.26
-            result+=[(36.75/5+5.5-(1/2+(target[i]+hit[i])/2))*e*(atk[i]*3.9)*element[i]*bonus[i]*(1+soulseed)**5/int(time)]
+            if int(time)==99:
+                result+=[(36.75/5+5.5-(1/2+(target[i]+hit[i])/2))*e*(atk[i]*3.9)*element[i]*bonus[i]*(1+soulseed)**5/round[i]]
+            else:
+                result+=[(36.75/5+5.5-(1/2+(target[i]+hit[i])/2))*e*(atk[i]*3.9)*element[i]*bonus[i]*(1+soulseed)**5/int(time)]
         elif weapon[i] == "Magic":
-            result+=[(36.75/5+11-(target[i]/2+hit[i]*0.3))*(atk[i]*3.9)*element[i]*bonus[i]*(1+soulseed)**5/int(time)]
+            if int(time)==99:
+                result+=[(36.75/5+11-(target[i]/2+hit[i]*0.3))*(atk[i]*3.9)*element[i]*bonus[i]*(1+soulseed)**5/round[i]]
+            else:
+                result+=[(36.75/5+11-(target[i]/2+hit[i]*0.3))*(atk[i]*3.9)*element[i]*bonus[i]*(1+soulseed)**5/int(time)]
         else:
-            result+=[(36.75/5+13.5-(target[i]+hit[i])/2)*(atk[i]*3.9)*(element[i]+(36.75*3-target[i]*10)*0.01)*bonus[i]*(1+soulseed)**5/int(time)]
+            if int(time)==99:
+                result+=[(36.75/5+13.5-(target[i]+hit[i])/2)*(atk[i]*3.9)*(element[i]+(36.75*3-target[i]*10)*0.01)*bonus[i]*(1+soulseed)**5/round[i]]
+            else:
+                result+=[(36.75/5+13.5-(target[i]+hit[i])/2)*(atk[i]*3.9)*(element[i]+(36.75*3-target[i]*10)*0.01)*bonus[i]*(1+soulseed)**5/int(time)]
     return result
 
 def skill1(round:float,target:int,rballsec:float)->list: #發動時間1

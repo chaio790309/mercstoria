@@ -21,6 +21,7 @@ if result:
                     data=pd.read_csv("unit.csv")
                     break
                 case "n":
+                    print("選擇不進行資料更新")
                     break
                 case _:
                     print("無效的輸入")
@@ -84,17 +85,21 @@ while True:
         continue
 # bonus,bonus2="Gun","銃弾"
 while True:
-    time=input("輸入預期時間 (19~36) (建議25左右) : ")
+    time=input("麻痺打法輸入預期時間 (15~36) (延時請輸入99) : ")
     if time.isdigit():
-        if int(time)<19 or int(time)>36:
+        if int(time)==99:
+            print("敵人屬性:",enemyelement," 部位數:",target," 加成武器:",bonus2," 預期時間:","延時打法")
+            break
+        elif int(time)<19 or int(time)>36:
             print("無效的輸入")
         else:
+            print("敵人屬性:",enemyelement," 部位數:",target," 加成武器:",bonus2," 預期時間:",time+"秒")
             break
     else:
         print("無效的輸入")
         continue
 # time="25"
-print("敵人屬性:",enemyelement," 部位數:",target," 加成武器:",bonus2," 預期時間:",time+"秒")
+# print("敵人屬性:",enemyelement," 部位數:",target," 加成武器:",bonus2," 預期時間:",time+"秒")
 
 
 
@@ -107,7 +112,7 @@ filter=data["element"]==element #篩選對應屬性
 data=data[filter]
 
 
-# 加成武器
+#加成武器
 data["bonus"]=ra.bonus(data["weapon"],bonus,data.index)
 
 #進場攻速
@@ -132,52 +137,83 @@ data["relement"]=ra.element(data["element"],data[enemyelement],data.index)
 data["normalDPS"]=ra.normalDPS(data["rtarget"],data["ratks"],data["ratk"],data["relement"],data["bonus"])
 
 #技能期望 判斷武器算法
-data["skillDPS"]=ra.SkillDPS(data["weapon"],data["target"],data["hit"],data["relement"],data["ratk"],data.index,time,data["bonus"])
+data["skillDPS"]=ra.SkillDPS(data["weapon"],data["target"],data["hit"],data["relement"],data["ratk"],data.index,time,data["round"],data["bonus"])
 
-#發動1期望
-data["skill1"]=ra.skill1(data["round"],data["target"],data["rballsec"])
+if int(time)!=99:
+    #發動1期望秒
+    data["skill1"]=ra.skill1(data["round"],data["target"],data["rballsec"])
 
-#發動2期望
-data["skill2"]=ra.skill2(data["round"],data["target"],data["rballsec"])
+    #發動2期望秒
+    data["skill2"]=ra.skill2(data["round"],data["target"],data["rballsec"])
 
-#發動期望次數
-data["skillnumber"]=ra.skillnumber(data["skill2"],time)
+    #發動期望次數
+    data["skillnumber"]=ra.skillnumber(data["skill2"],time)
 
-#排序用期望傷害
-data["expectedDPS"]=ra.expectedDPS(data["normalDPS"],data["skillDPS"],data["skillnumber"])
+    #排序用期望傷害
+    data["expectedDPS"]=ra.expectedDPS(data["normalDPS"],data["skillDPS"],data["skillnumber"])
+else:
+    #排序用期望傷害
+    data["expectedDPS"]=ra.expectedDPS(data["normalDPS"],data["skillDPS"],1)
+
+
 
 #排序並重置索引
-data=data.sort_values(by=["expectedDPS"],ascending=True).reset_index(drop=True)
+    data=data.sort_values(by=["expectedDPS"],ascending=True).reset_index(drop=True)
 # index=data.index.tolist() #取索引供取資料
 
 
-x=range(data.shape[0]) #shape回傳[列數,行數] 取得總列
-name=data["name"]
-y=data["normalDPS"] #測試值
-z=data["skillDPS"]
-plt.rcParams['font.sans-serif'] = ['Microsoft JhengHei'] #讓亂碼正常顯示
-plt.title(("降臨後衛DPS參考表"+"  BOSS :"+enemyelement+"  部位數 :"+str(target)+"  加成 :"+bonus2+"  預期時間 :"+str(time)))
-plt.barh(x,y,color="blue",label="普通攻擊期望")
-plt.barh(x,z,color="c",label="上位攻擊期望",left=y) #left 左邊距離
-plt.barh(x,z,color="m",label="上位攻擊期望2",left=y+z)
-plt.yticks(x,name,fontsize=8)
-for i in data.index:
-    plt.text(
-    int(data["normalDPS"][i]+data["skillDPS"][i]), #x軸
-    i, #y軸
-    round(data["skill1"][i],2), #文字
-    fontsize=10,
-    color="w",
-    verticalalignment="center", #垂直對齊方式
-    horizontalalignment="right") #水平
 
-    plt.text(
-    int(data["normalDPS"][i]+data["skillDPS"][i]*2), #x軸
-    i, #y軸
-    round(data["skill2"][i],2), #文字
-    fontsize=10,
-    color="w",
-    verticalalignment="center", #垂直對齊方式
-    horizontalalignment="right") #水平
+if int(time)!=99:
+    x=range(data.shape[0]) #shape回傳[列數,行數] 取得總列
+    name=data["name"]
+    y=data["normalDPS"] #測試值
+    z=data["skillDPS"]
+    plt.rcParams['font.sans-serif'] = ['Microsoft JhengHei'] #讓亂碼正常顯示
+    plt.title(("降臨後衛DPS參考表"+"  BOSS :"+enemyelement+"  部位數 :"+str(target)+"  加成 :"+bonus2+"  預期時間 :"+str(time)))
+    plt.barh(x,y,color="blue",label="普通攻擊期望")
+    plt.barh(x,z,color="c",label="上位攻擊期望",left=y) #left 左邊距離
+    plt.barh(x,z,color="m",label="上位攻擊期望2",left=y+z)
+    plt.yticks(x,name,fontsize=8)
+    for i in data.index:
+        plt.text(
+        int(data["normalDPS"][i]+data["skillDPS"][i]), #x軸
+        i, #y軸
+        round(data["skill1"][i],2), #文字
+        fontsize=10,
+        color="w",
+        verticalalignment="center", #垂直對齊方式
+        horizontalalignment="right") #水平
 
-plt.show()
+        plt.text(
+        int(data["normalDPS"][i]+data["skillDPS"][i]*2), #x軸
+        i, #y軸
+        round(data["skill2"][i],2), #文字
+        fontsize=10,
+        color="w",
+        verticalalignment="center", #垂直對齊方式
+        horizontalalignment="right") #水平
+
+    plt.show()
+else:
+    x=range(data.shape[0]) #shape回傳[列數,行數] 取得總列
+    name=data["name"]
+    y=data["normalDPS"] #測試值
+    z=data["skillDPS"]
+    plt.rcParams['font.sans-serif'] = ['Microsoft JhengHei'] #讓亂碼正常顯示
+    plt.title(("降臨後衛DPS參考表"+"  BOSS :"+enemyelement+"  部位數 :"+str(target)+"  加成 :"+bonus2+"  預期時間 :"+"延時打法"))
+    plt.barh(x,y,color="blue",label="普通攻擊期望")
+    plt.barh(x,z,color="c",label="上位攻擊期望",left=y) #left 左邊距離
+    plt.yticks(x,name,fontsize=8)
+    for i in data.index:
+        plt.text(
+        int(data["normalDPS"][i]+data["skillDPS"][i]), #x軸
+        i, #y軸
+        round((data["normalDPS"][i]+data["skillDPS"][i])/1000000,2), #文字
+        fontsize=10,
+        color="w",
+        verticalalignment="center", #垂直對齊方式
+        horizontalalignment="right") #水平
+
+
+
+    plt.show()
