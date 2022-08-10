@@ -1,8 +1,8 @@
-import pandas as pd
-import geometry.realability as ra
-import geometry.allunit as ga
-import geometry.unittable as gu
-import os
+import pandas as pd #資料分析
+import geometry.realability as ra #自訂進場能力
+import geometry.allunit as ga #自訂全單位
+import geometry.unittable as gu #自訂表格
+import os #path處理路徑
 
 
 print("檢查更新中...")
@@ -54,7 +54,7 @@ while True:
     else:
         print("無效的輸入")
         continue
-# element,enemyelement ="water","fire"
+
 while True:
     enemytarget=input("輸入敵人部位數 (2 / 3 / 4 / 5) : ")
     if enemytarget in ["2","3","4","5"]:
@@ -63,7 +63,7 @@ while True:
     else:
         print("無效的輸入")
         continue
-# target=3
+
 while True:
     bonus=input("輸入加成武器編號 (1.弓矢 2.魔法 3.銃弾 4.純比較) : ")
     if bonus in ["1","2","3","4"]:
@@ -83,10 +83,10 @@ while True:
     else:
         print("無效的輸入")
         continue
-# bonus,bonus2="Gun","銃弾"
+
 while True:
     time=input("麻痺打法輸入預期時間 (15~36) (延時請輸入99) : ")
-    if time.isdigit():
+    if time.isdigit(): #確認為>=0數字
         if int(time)==99:
             print("敵人屬性:",enemyelement," 部位數:",target," 加成武器:",bonus2," 預期時間:","延時打法")
             break
@@ -98,10 +98,6 @@ while True:
     else:
         print("無效的輸入")
         continue
-# time="25"
-# print("敵人屬性:",enemyelement," 部位數:",target," 加成武器:",bonus2," 預期時間:",time+"秒")
-
-
 
 
 
@@ -213,7 +209,5 @@ else:
         color="w",
         verticalalignment="center", #垂直對齊方式
         horizontalalignment="right") #水平
-
-
 
     plt.show()

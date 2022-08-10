@@ -1,7 +1,5 @@
-from asyncio.windows_events import NULL
-
-import urllib.request as req
-import bs4
+import urllib.request as req #請求
+import bs4 #解析
 
 def get(x):
 

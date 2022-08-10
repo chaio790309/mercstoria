@@ -1,9 +1,7 @@
 import urllib.request as req
-
-
 import geometry.get as g #寫好的函數
 import urllib.parse #將文字轉碼給url用
-import bs4
+import bs4 #解析網頁data
 
 def allunit():
     url="https://xn--cckza4aydug8bd3l.gamerch.com/%E2%98%855"
