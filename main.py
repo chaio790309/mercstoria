@@ -90,7 +90,7 @@ while True:
         if int(time)==99:
             print("敵人屬性:",enemyelement," 部位數:",target," 加成武器:",bonus2," 預期時間:","延時打法")
             break
-        elif int(time)<19 or int(time)>36:
+        elif int(time)<15 or int(time)>36:
             print("無效的輸入")
         else:
             print("敵人屬性:",enemyelement," 部位數:",target," 加成武器:",bonus2," 預期時間:",time+"秒")
